@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html><head>
+<link rel="stylesheet" href="stylesheets/main.css">
+</head><body>
+<div class="container">
+  <div class="share">
+    <h2 class="text">Screensharing room:</h2>
+    <h2 class="link"></h2>
+  </div>
+
+  <div id="callControls" class="call-controls">
+    <input id="hangupButton" type="button" class="bulletproof-button" value="Hang Up &rarr;"/>
+  </div>
+
+  <div id="videoContainer" class="ui-video-container">
+    <div id="remoteVideoContainer" class="ui-video-remote-container"></div>
+    <div id="localVideoContainer" class="ui-video-local-container"></div>
+    <div class="holiday-frame"></div>
+  </div>
+</div>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
+<script type="text/javascript" src="https://cdn.respoke.io/respoke.min.js"></script>
+
+<script type="text/javascript" src="javascripts/main.js"></script>
+</body>
+</html>

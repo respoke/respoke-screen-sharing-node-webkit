@@ -1,0 +1,88 @@
+.container {
+	width: 650px;
+	margin-left: auto;
+	margin-right: auto;
+
+	font-family: Arial, Helvetica;
+}
+
+.ui-video-container {
+	position: relative;
+	width: 650px;
+	height: 525px;
+}
+
+.ui-video-remote-container {
+	position: absolute;
+	float: left;
+	z-index: 10;
+	width: 565px;
+	height: 365px;
+	margin-left: 44px;
+	/*margin-top: 44px;*/
+	background-color: black;
+}
+
+.ui-video-local-container {
+	position: absolute;
+	z-index: 20;
+	width: 120px;
+	height: 90px;
+	margin-left: 52px;
+	margin-top: 310px;
+}
+
+.local-video {
+	width: 120px;
+	height: 90px;
+}
+
+.remote-video {
+	width: 100%;
+}
+
+#connectedView {
+	display: none;
+}
+
+#callControls {
+	display: none;
+}
+
+#callControls input {
+	margin-bottom: 10px;
+}
+
+.holiday-frame {
+	position: relative;
+	float: left;
+	z-index: 30;
+	width: 650px;
+	height: 526px;
+}
+
+.share {
+	text-align: center;
+}
+
+.call-controls {
+	text-align: center;
+}
+
+.bulletproof-button {
+	font-size: 15px; 
+	font-family: Helvetica, Arial, sans-serif; 
+	font-weight: normal; 
+	color: #ffffff; 
+	text-decoration: none; 
+	background-color: #4294F8; 
+	border-top: 10px solid #4294F8; 
+	border-bottom: 10px solid #4294F8; 
+	border-left: 20px solid #4294F8; 
+	border-right: 20px solid #4294F8; 
+	border-radius: 3px; 
+	-webkit-border-radius: 3px; 
+	-moz-border-radius: 3px; 
+	display: inline-block;
+	cursor: pointer;
+}

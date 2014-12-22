@@ -1,0 +1,25 @@
+{
+  "name": "nw-demo",
+  "main": "index.html",
+  "single-instance": false,
+  "window": {
+    "title": "node-webkit demo",
+    "icon": "icon.png",
+    "toolbar": true,
+    "frame": true,
+    "width": 800,
+    "height": 500,
+    "position": "mouse"
+  },
+  "chromium-args": "--enable-usermedia-screen-capturing",
+  "dependencies": {
+    "lodash": "*",
+    "current-processes": "*"
+  },
+  "webkit": {
+    "plugin": true
+  },
+  "devDependencies": {
+    "nodewebkit": "^0.11.2"
+  }
+}
