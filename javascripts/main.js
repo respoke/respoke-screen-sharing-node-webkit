@@ -45,7 +45,7 @@ client.listen('disconnect', function() {
 client.listen('call', function(evt) {
   call = evt.call;
   
-  if (call.initiator !== true) {
+  if (call.caller !== true) {
     call.answer({
       onConnect: onConnect,
       onLocalMedia: onLocalVideo
@@ -138,20 +138,7 @@ function handleNewEndoint(myName, theirName) {
   console.log('shouldCall:', shouldCall);
   
   if (shouldCall) {
-    var constraints = {
-      audio: false,
-      video: {
-        mandatory: {
-          chromeMediaSource: 'screen',
-          maxHeight: 2000,
-          maxWidth: 2000
-        },
-        optional: []
-      }
-    };
-    
-    otherEndpoint.startCall({
-      constraints: constraints,
+    otherEndpoint.startScreenShare({
       onConnect: onConnect,
       onLocalMedia: onLocalVideo
     });
