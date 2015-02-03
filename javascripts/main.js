@@ -60,6 +60,10 @@ client.listen('call', function(evt) {
           audioCall.answer({
               constraints: {
                   audio: true,
+                  /* There's some kind of bug preventing video from working for the non-screensharer. This
+                   * flag makes it all the way to getUserMedia correctly and the media returned contains video
+                   * and audio, but after the call to pc.addStream(), the RTCPeerConnection reports that only
+                   * the audio track exists. I tried setting OfferToReceiveVideo on the other side to no avail. ES */
                   video: true
               },
               onLocalMedia: onLocalVideo,
