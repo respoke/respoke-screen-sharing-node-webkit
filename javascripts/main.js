@@ -1,6 +1,7 @@
 // the ID for your app. Used to reference the app.
 var appid = "2157ed7e-83ee-4e1f-a06c-97eedec16570";
 var call = null;
+var audioCall = null;
 var urlParams = parseUrl();
 var baseUrl = getUrl();
 
@@ -43,26 +44,45 @@ client.listen('disconnect', function() {
 
 // listen for and answer incoming calls
 client.listen('call', function(evt) {
-  call = evt.call;
   
-  if (call.initiator !== true) {
-    call.answer({
-      onConnect: onConnect,
-      onLocalMedia: onLocalVideo
-    });
+  if (evt.call.caller !== true) {
+      if (evt.call.incomingMedia.hasScreenShare()) {
+          call = evt.call;
+          call.answer({
+              onConnect: onConnect,
+              onHangup: function() {
+                  call = null;
+                  $('#callControls').hide();
+              }
+          });
+      } else {
+          audioCall = evt.call;
+          audioCall.answer({
+              constraints: {
+                  audio: true,
+                  /* There's some kind of bug preventing video from working for the non-screensharer. This
+                   * flag makes it all the way to getUserMedia correctly and the media returned contains video
+                   * and audio, but after the call to pc.addStream(), the RTCPeerConnection reports that only
+                   * the audio track exists. I tried setting OfferToReceiveVideo on the other side to no avail. ES */
+                  video: true
+              },
+              onLocalMedia: onLocalVideo,
+              onHangup: function () {
+                  audioCall = null;
+              }
+          });
+      }
   }
   
-  call.listen('hangup', function() {
-    call = null;
-    $('#callControls').hide();
-  });
 });
 
 
 $('#hangupButton').click(function hangup() {
   if (call) {
     call.hangup();
+    audioCall.hangup();
     call = null;
+    audioCall.null;
     $('#callControls').hide();
   }
 });
@@ -138,23 +158,16 @@ function handleNewEndoint(myName, theirName) {
   console.log('shouldCall:', shouldCall);
   
   if (shouldCall) {
-    var constraints = {
-      audio: false,
-      video: {
-        mandatory: {
-          chromeMediaSource: 'screen',
-          maxHeight: 2000,
-          maxWidth: 2000
-        },
-        optional: []
-      }
-    };
-    
-    otherEndpoint.startCall({
-      constraints: constraints,
-      onConnect: onConnect,
+    otherEndpoint.startScreenShare({
       onLocalMedia: onLocalVideo
     });
+    // hack to get around an elusive race condition. Soon, we'll make it so a second call
+    // isn't needed to get audio going with a screen share.
+    setTimeout(function () {
+        otherEndpoint.startAudioCall({
+          onConnect: onConnect
+        });
+    }, 100);
   }
 }
 
@@ -169,7 +182,7 @@ function doIPlaceTheCall(myName, theirName) {
 }
 
 function onConnect(evt) {
-  console.log('onConnet()', evt);
+  console.log('onConnect()', evt);
   
   $(evt.element).addClass('remote-video');
   
