@@ -7,7 +7,7 @@ var baseUrl = getUrl();
 console.log('baseUrl: ', baseUrl);
 
 // Set the respoke log level to 'debug' for more info
-respoke.log.setLevel('debug');
+//respoke.log.setLevel('debug');
 
 // generate a random room
 var room = "5VB8N";
