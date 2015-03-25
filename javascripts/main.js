@@ -7,7 +7,7 @@ var baseUrl = getUrl();
 console.log('baseUrl: ', baseUrl);
 
 // Set the respoke log level to 'debug' for more info
-//respoke.log.setLevel('debug');
+respoke.log.setLevel('debug');
 
 // generate a random room
 var room = "5VB8N";
@@ -130,16 +130,38 @@ function handleNewEndoint(myName, theirName) {
     id: theirName
   });
 
-  otherEndpoint.startScreenShare({
+  var gui = require('nw.gui');
+  gui.Screen.Init();
+  gui.Screen.chooseDesktopMedia(['window', 'screen'], function (streamId) {
+    var vid_constraint = {
+      mandatory: {
+        chromeMediaSource: 'desktop',
+        chromeMediaSourceId: streamId,
+        maxWidth: 1920,
+        maxHeight: 1080
+      },
+      optional: []
+    };
+
+    otherEndpoint.startCall({
+      target: 'screenshare',
+      constraints: {
+        audio: false,
+        video: vid_constraint,
+        mandatory: {},
+        optional: []
+      },
+      onConnect: onConnect,
       onLocalMedia: onLocalVideo
+    });
   });
   // hack to get around an elusive race condition. Soon, we'll make it so a second call
   // isn't needed to get audio going with a screen share.
-  setTimeout(function () {
-      otherEndpoint.startAudioCall({
-          onConnect: onConnect
-      });
-  }, 100);
+  //setTimeout(function () {
+  //    otherEndpoint.startAudioCall({
+  //        onConnect: onConnect
+  //    });
+  //}, 100);
 }
 
 function onConnect(evt) {

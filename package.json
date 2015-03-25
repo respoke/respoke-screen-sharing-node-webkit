@@ -1,12 +1,12 @@
 {
-  "name": "nw-demo",
+  "name": "respoke-screen-sharing-nwjs",
   "main": "index.html",
   "single-instance": false,
   "scripts": {
-    "start": "./node_modules/nodewebkit/nodewebkit/node-webkit.app/Contents/MacOS/node-webkit ."
+    "start": "nw"
   },
   "window": {
-    "title": "node-webkit demo",
+    "title": "respoke screen sharing nwjs demo",
     "icon": "icon.png",
     "toolbar": true,
     "frame": true,
@@ -16,13 +16,11 @@
   },
   "chromium-args": "--enable-usermedia-screen-capturing",
   "dependencies": {
+    "current-processes": "*",
     "lodash": "*",
-    "current-processes": "*"
+    "nw": "^0.12.0-1"
   },
   "webkit": {
     "plugin": true
-  },
-  "devDependencies": {
-    "nodewebkit": "^0.11.2"
   }
 }

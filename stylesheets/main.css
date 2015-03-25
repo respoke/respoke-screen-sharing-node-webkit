@@ -9,7 +9,6 @@
 .ui-video-container {
 	position: relative;
 	width: 650px;
-	height: 525px;
 }
 
 .ui-video-remote-container {
@@ -53,14 +52,6 @@
 	margin-bottom: 10px;
 }
 
-.holiday-frame {
-	position: relative;
-	float: left;
-	z-index: 30;
-	width: 650px;
-	height: 526px;
-}
-
 .share {
 	text-align: center;
 }
@@ -70,19 +61,19 @@
 }
 
 .bulletproof-button {
-	font-size: 15px; 
-	font-family: Helvetica, Arial, sans-serif; 
-	font-weight: normal; 
-	color: #ffffff; 
-	text-decoration: none; 
-	background-color: #4294F8; 
-	border-top: 10px solid #4294F8; 
-	border-bottom: 10px solid #4294F8; 
-	border-left: 20px solid #4294F8; 
-	border-right: 20px solid #4294F8; 
-	border-radius: 3px; 
-	-webkit-border-radius: 3px; 
-	-moz-border-radius: 3px; 
+	font-size: 15px;
+	font-family: Helvetica, Arial, sans-serif;
+	font-weight: normal;
+	color: #ffffff;
+	text-decoration: none;
+	background-color: #4294F8;
+	border-top: 10px solid #4294F8;
+	border-bottom: 10px solid #4294F8;
+	border-left: 20px solid #4294F8;
+	border-right: 20px solid #4294F8;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
 	display: inline-block;
 	cursor: pointer;
 }
