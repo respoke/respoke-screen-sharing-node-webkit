@@ -2,6 +2,9 @@
   "name": "nw-demo",
   "main": "index.html",
   "single-instance": false,
+  "scripts": {
+    "start": "./node_modules/nodewebkit/nodewebkit/node-webkit.app/Contents/MacOS/node-webkit ."
+  },
   "window": {
     "title": "node-webkit demo",
     "icon": "icon.png",
