@@ -3,9 +3,5 @@
 ```
 npm install
 
-Open Node Webkit Instance 1
-./node_modules/nodewebkit/nodewebkit/node-webkit.app/Contents/MacOS/node-webkit .
-
-Open Node Webkit Instance 2
-./node_modules/nodewebkit/nodewebkit/node-webkit.app/Contents/MacOS/node-webkit .
+run two instances of the app using `npm start` and they will connect to each other
 ```
