@@ -30,10 +30,11 @@ client.listen('disconnect', function() {
 // listen for and answer incoming calls
 client.listen('call', function(evt) {
   if (evt.call.caller !== true) {
-    if (evt.call.incomingMedia.hasScreenShare()) {
+    if (evt.call.target === 'screenshare') {
       call = evt.call;
       call.answer({
         onConnect: onConnect,
+        onLocalMedia: onLocalVideo,
         onHangup: function() {
           call = null;
           $('#callControls').hide();
@@ -48,9 +49,8 @@ client.listen('call', function(evt) {
            * flag makes it all the way to getUserMedia correctly and the media returned contains video
            * and audio, but after the call to pc.addStream(), the RTCPeerConnection reports that only
            * the audio track exists. I tried setting OfferToReceiveVideo on the other side to no avail. ES */
-          video: true
+          video: false
         },
-        onLocalMedia: onLocalVideo,
         onHangup: function () {
           audioCall = null;
         }
@@ -155,13 +155,11 @@ function handleNewEndoint(myName, theirName) {
       onLocalMedia: onLocalVideo
     });
   });
-  // hack to get around an elusive race condition. Soon, we'll make it so a second call
-  // isn't needed to get audio going with a screen share.
-  //setTimeout(function () {
-  //    otherEndpoint.startAudioCall({
-  //        onConnect: onConnect
-  //    });
-  //}, 100);
+  //hack to get around an elusive race condition. Soon, we'll make it so a second call
+  //isn't needed to get audio going with a screen share.
+  setTimeout(function () {
+      otherEndpoint.startAudioCall();
+  }, 100);
 }
 
 function onConnect(evt) {
@@ -172,9 +170,13 @@ function onConnect(evt) {
   var $remoteVideoContainer = $('#remoteVideoContainer');
   var $remoteVideo = $remoteVideoContainer.find('video');
 
+  console.log('attaching remote video', evt.element);
+
   if($remoteVideo.length) {
+    console.log('attaching to', $remoteVideo);
     $remoteVideo.replaceWith(evt.element);
   } else {
+    console.log('appending to', $remoteVideoContainer);
     $remoteVideoContainer.append(evt.element);
   }
 
@@ -189,9 +191,12 @@ function onLocalVideo(evt) {
   var $localVideoContainer = $('#localVideoContainer');
   var $localVideo = $localVideoContainer.find('video');
 
+  console.log('attaching local video', evt.element);
   if($localVideo.length) {
+    console.log('attaching to', $localVideo);
     $localVideo.replaceWith(evt.element);
   } else {
+    console.log('appending to', $localVideoContainer);
     $localVideoContainer.append(evt.element);
   }
 }
