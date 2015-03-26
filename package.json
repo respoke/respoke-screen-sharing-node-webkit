@@ -1,12 +1,15 @@
 {
   "name": "respoke-screen-sharing-nwjs",
+  "version": "1.0.0",
+  "description": "Sample Respoke screensharing app using nw.js",
   "main": "index.html",
+  "private": true,
   "single-instance": false,
   "scripts": {
     "start": "nw"
   },
   "window": {
-    "title": "respoke screen sharing nwjs demo",
+    "title": "Respoke screensharing nwjs demo",
     "icon": "icon.png",
     "toolbar": true,
     "frame": true,
@@ -14,6 +17,11 @@
     "height": 500,
     "position": "mouse"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/respoke/respoke-screen-sharing-node-webkit.git"
+  },
+  "license": "MIT",
   "chromium-args": "--enable-usermedia-screen-capturing",
   "dependencies": {
     "nw": "^0.12.0-1"

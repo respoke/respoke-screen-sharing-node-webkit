@@ -1,5 +1,6 @@
 {
   "name": "respoke-screen-sharing-nwjs",
+  "version": "1.0.0",
   "dependencies": {
     "nw": {
       "version": "0.12.0-1",
