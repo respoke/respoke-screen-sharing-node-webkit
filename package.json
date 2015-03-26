@@ -16,8 +16,6 @@
   },
   "chromium-args": "--enable-usermedia-screen-capturing",
   "dependencies": {
-    "current-processes": "*",
-    "lodash": "*",
     "nw": "^0.12.0-1"
   },
   "webkit": {
