@@ -3,18 +3,11 @@
 <link rel="stylesheet" href="stylesheets/main.css">
 </head><body>
 <div class="container">
-  <div class="share">
-    <h2 class="text">Screensharing room: <span class="link"></span></h2>
-  </div>
-
   <div id="callControls" class="call-controls">
-    <input id="hangupButton" type="button" class="bulletproof-button" value="Hang Up &rarr;"/>
+    <button id="hangupButton" class="bulletproof-button">End Screen Share</button>
   </div>
 
-  <div id="videoContainer" class="ui-video-container">
-    <div id="remoteVideoContainer" class="ui-video-remote-container"></div>
-    <div id="localVideoContainer" class="ui-video-local-container"></div>
-  </div>
+  <div id="videoContainer" class="video-container"></div>
 </div>
 
 <script>

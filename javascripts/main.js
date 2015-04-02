@@ -1,7 +1,9 @@
 // the ID for your app. Used to reference the app.
 var appid = "2157ed7e-83ee-4e1f-a06c-97eedec16570";
-var call = null;
-var audioCall = null;
+var ongoingCalls = {
+  screenShare: null,
+  audioCall: null
+};
 var baseUrl = getUrl();
 
 console.log('baseUrl: ', baseUrl);
@@ -29,20 +31,19 @@ client.listen('disconnect', function() {
 
 // listen for and answer incoming calls
 client.listen('call', function(evt) {
-  if (evt.call.caller !== true) {
-    if (evt.call.target === 'screenshare') {
-      call = evt.call;
+  var call = evt.call;
+  if (call.caller !== true) {
+    if (call.incomingMedia.hasScreenShare()) {
       call.answer({
         onConnect: onConnect,
         onLocalMedia: onLocalVideo,
         onHangup: function() {
-          call = null;
+          ongoingCalls.screenShare = null;
           $('#callControls').hide();
         }
       });
     } else {
-      audioCall = evt.call;
-      audioCall.answer({
+      call.answer({
         constraints: {
           audio: true,
           /* There's some kind of bug preventing video from working for the non-screensharer. This
@@ -51,8 +52,11 @@ client.listen('call', function(evt) {
            * the audio track exists. I tried setting OfferToReceiveVideo on the other side to no avail. ES */
           video: false
         },
+        onConnect: function (evt) {
+          ongoingCalls.audioCall = evt.target;
+        },
         onHangup: function () {
-          audioCall = null;
+          ongoingCalls.audioCall = null;
         }
       });
     }
@@ -60,12 +64,11 @@ client.listen('call', function(evt) {
 });
 
 $('#hangupButton').click(function hangup() {
-  if (call) {
-    call.hangup();
-    audioCall.hangup();
-    call = null;
-    audioCall = null;
-    $('#callControls').hide();
+  if (ongoingCalls.screenShare) {
+    ongoingCalls.screenShare.hangup();
+  }
+  if (ongoingCalls.audioCall) {
+    ongoingCalls.audioCall.hangup();
   }
 });
 
@@ -113,9 +116,8 @@ client.connect({
 function someoneLeft(evt) {
   console.log('someone left: ', evt);
 
-  if (call && !evt.target.connections.length) {
-    call.hangup();
-    call = null;
+  if (ongoingCalls.screenShare && !evt.target.connections.length) {
+    ongoingCalls.screenShare.hangup();
     $('#callControls').hide();
   }
 }
@@ -130,45 +132,41 @@ function handleNewEndoint(myName, theirName) {
     id: theirName
   });
 
-  var gui = require('nw.gui');
-  gui.Screen.Init();
-  gui.Screen.chooseDesktopMedia(['window', 'screen'], function (streamId) {
-    var vid_constraint = {
-      mandatory: {
-        chromeMediaSource: 'desktop',
-        chromeMediaSourceId: streamId,
-        maxWidth: 1920,
-        maxHeight: 1080
-      },
-      optional: []
-    };
-
-    otherEndpoint.startCall({
-      target: 'screenshare',
-      constraints: {
-        audio: false,
-        video: vid_constraint,
-        mandatory: {},
-        optional: []
-      },
-      onConnect: onConnect,
-      onLocalMedia: onLocalVideo
-    });
+  otherEndpoint.startScreenShare({
+    onConnect: onConnect,
+    onLocalMedia: onLocalVideo,
+    onHangup: function () {
+      ongoingCalls.screenShare = null;
+      $('#callControls').hide();
+    }
   });
   //hack to get around an elusive race condition. Soon, we'll make it so a second call
   //isn't needed to get audio going with a screen share.
   setTimeout(function () {
-      otherEndpoint.startAudioCall();
+      otherEndpoint.startAudioCall({
+        onConnect: function (evt) {
+          ongoingCalls.audioCall = evt.target;
+        },
+        onHangup: function () {
+          ongoingCalls.audioCall = null;
+        }
+      });
   }, 100);
 }
 
 function onConnect(evt) {
   console.log('onConnect()', evt);
 
-  $(evt.element).addClass('remote-video');
+  ongoingCalls.screenShare = evt.target;
+  $('#callControls').show();
 
-  var $remoteVideoContainer = $('#remoteVideoContainer');
-  var $remoteVideo = $remoteVideoContainer.find('video');
+  if (!evt.element) {
+    console.log('no remote media to display');
+    return;
+  }
+
+  var $videoContainer = $('#videoContainer');
+  var $remoteVideo = $videoContainer.find('video');
 
   console.log('attaching remote video', evt.element);
 
@@ -176,28 +174,24 @@ function onConnect(evt) {
     console.log('attaching to', $remoteVideo);
     $remoteVideo.replaceWith(evt.element);
   } else {
-    console.log('appending to', $remoteVideoContainer);
-    $remoteVideoContainer.append(evt.element);
+    console.log('appending to', $videoContainer);
+    $videoContainer.append(evt.element);
   }
-
-  $('#callControls').show();
 }
 
 function onLocalVideo(evt) {
   console.log('onLocalVideo()', evt);
 
-  $(evt.element).addClass('local-video');
-
-  var $localVideoContainer = $('#localVideoContainer');
-  var $localVideo = $localVideoContainer.find('video');
+  var $videoContainer = $('#videoContainer');
+  var $localVideo = $videoContainer.find('video');
 
   console.log('attaching local video', evt.element);
   if($localVideo.length) {
     console.log('attaching to', $localVideo);
     $localVideo.replaceWith(evt.element);
   } else {
-    console.log('appending to', $localVideoContainer);
-    $localVideoContainer.append(evt.element);
+    console.log('appending to', $videoContainer);
+    $videoContainer.append(evt.element);
   }
 }
 

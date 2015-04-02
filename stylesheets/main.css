@@ -1,78 +1,41 @@
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    background-color: #000;
+}
+
 .container {
-	width: 650px;
-	margin-left: auto;
-	margin-right: auto;
-
-	font-family: Arial, Helvetica;
-}
-
-.ui-video-container {
-	position: relative;
-	width: 650px;
-}
-
-.ui-video-remote-container {
-	position: absolute;
-	float: left;
-	z-index: 10;
-	width: 565px;
-	height: 365px;
-	margin-left: 44px;
-	/*margin-top: 44px;*/
-	background-color: green;
-}
-.ui-video-remote-container::after {
-    content: "";
-    background: url('../images/NoRemoteVideo.png');
-    opacity: 0.5;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    position: absolute;
-    z-index: -1;
-}
-.ui-video-local-container {
-	position: absolute;
-	z-index: 20;
-	width: 120px;
-	height: 90px;
-	margin-left: 52px;
-	margin-top: 310px;
-}
-
-.local-video {
-	width: 120px;
-	height: 90px;
-}
-
-.remote-video {
-	width: 100%;
-}
-
-#connectedView {
-	display: none;
-}
-
-#callControls {
-	display: none;
-}
-
-#callControls input {
-	margin-bottom: 10px;
-}
-
-.share {
-	text-align: center;
+	margin: auto;
+    text-align: center;
+	font-family: Helvetica, Arial, sans-serif;
 }
 
 .call-controls {
-	text-align: center;
+    position: fixed;
+    top: 0;
+    left: calc(50vw - 80px);
+	display: none;
+    margin-bottom: 10px;
+    z-index: 50;
+}
+
+.video-container {
+    width: 100vw;
+    height: calc(100vh - 20px);
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.video-container video {
+    width: 100%;
+    height: 100%;
 }
 
 .bulletproof-button {
 	font-size: 15px;
-	font-family: Helvetica, Arial, sans-serif;
 	font-weight: normal;
 	color: #ffffff;
 	text-decoration: none;
@@ -86,4 +49,9 @@
 	-moz-border-radius: 3px;
 	display: inline-block;
 	cursor: pointer;
+    opacity: 0.5;
+}
+
+.bulletproof-button:hover {
+    opacity: 1;
 }
